@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void clique_Bouton2(View w){
         Intent intent= new Intent(this,pageSuivante.class);
-        intent.putExtra("param1",585);
+        String value1 = spinner.getSelectedItem().toString();
+        intent.putExtra("param1", value1);
         startActivity(intent);
     }
 }

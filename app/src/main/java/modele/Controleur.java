@@ -34,6 +34,14 @@ public final class Controleur {
 
     //Méthode qui créé une personne
     public void creerPersonne (int isexe, String nom, int iage){
+        //test de validité des champs
+
+
+
+
         maPersonne = new Personne(nom,isexe,iage);
+
+
+
     }
 }

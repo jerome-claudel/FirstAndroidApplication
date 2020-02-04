@@ -2,18 +2,22 @@ package controleur;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.testapplication.R;
+import com.example.testapplication.page3;
 
 import modele.Controleur;
+import modele.Personne;
 
 public class pageSuivante extends AppCompatActivity {
     //Variables
@@ -23,6 +27,7 @@ public class pageSuivante extends AppCompatActivity {
     private EditText monAge;
     private TextView txtMonRes;
     private ImageView monImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,8 @@ public class pageSuivante extends AppCompatActivity {
         monImage.setVisibility(View.INVISIBLE);
         //On créé le listener sur le boutonclaudel
         ecouterBouton();
+        Intent thisIntent = getIntent();
+        txtMonRes.setText(thisIntent.getExtras().getString("param1"));
     }
 
     private void ecouterBouton() {
@@ -62,15 +69,14 @@ public class pageSuivante extends AppCompatActivity {
         String leNom = txtNom.getText().toString();
         int lage = Integer.parseInt(monAge.getText().toString());
         int sexe = 0;
-        int i_Image_Femme = R.drawable.femme;
-        int i_Image_Homme = R.drawable.homme;
-
         if (rdMonSexe.isChecked()) {
             sexe = 1;
         }
         affichage(sexe, leNom, lage);
-        Toast.makeText(getBaseContext(), "Bienvenue",Toast.LENGTH_SHORT).show();
+
     }
+
+
 
     public void affichage(int sexe, String nom, int age) {
         this.monControleur.creerPersonne(sexe, nom, age);
@@ -80,6 +86,15 @@ public class pageSuivante extends AppCompatActivity {
     }
 
     public void click_ok(View v){
-        Toast.makeText(getBaseContext(), "Click boutton 2",Toast.LENGTH_SHORT).show();
+        String leNom = txtNom.getText().toString();
+        int lage = Integer.parseInt(monAge.getText().toString());
+        int sexe = 0;
+        if (rdMonSexe.isChecked()) {
+            sexe = 1;
+        }
+        this.monControleur.creerPersonne(sexe, leNom, lage);
+
+        Intent intent2= new Intent(this, page3.class);
+        startActivity(intent2);
     }
 }
