@@ -1,7 +1,5 @@
 package controleur;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,15 +7,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testapplication.R;
 import com.example.testapplication.page3;
 
 import modele.Controleur;
-import modele.Personne;
 
 public class pageSuivante extends AppCompatActivity {
     //Variables
@@ -27,7 +25,11 @@ public class pageSuivante extends AppCompatActivity {
     private EditText monAge;
     private TextView txtMonRes;
     private ImageView monImage;
-
+    private String erreurMessage;
+    private String str_Nom;
+    private String str_Age;
+    private int i_Age;
+    private int i_Sexe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class pageSuivante extends AppCompatActivity {
         //On récupère l'instance du controleur
         this.monControleur = Controleur.getMonInstance();
     }
+
     //Méthodes
     private void initialisation() {
         //Récupère les objets de la fenêtre
@@ -65,36 +68,48 @@ public class pageSuivante extends AppCompatActivity {
         });
     }
 
+
+
     private void clickBouton() {
-        String leNom = txtNom.getText().toString();
-        int lage = Integer.parseInt(monAge.getText().toString());
-        int sexe = 0;
-        if (rdMonSexe.isChecked()) {
-            sexe = 1;
-        }
-        affichage(sexe, leNom, lage);
-
+        recupereValeurs();
+        affichage(i_Sexe, str_Nom, i_Age);
     }
-
-
-
     public void affichage(int sexe, String nom, int age) {
-        this.monControleur.creerPersonne(sexe, nom, age);
-        txtMonRes.setText(monControleur.getMaPersonne().getStrMessage());
-        monImage.setVisibility(View.VISIBLE);
-        monImage.setImageResource(monControleur.getMaPersonne().getI_image());
+            this.monControleur.creerPersonne(sexe, nom, age);
+            if(!this.monControleur.getErreurMessage().equals("")){
+                Toast.makeText(getBaseContext(),monControleur.getErreurMessage(),Toast.LENGTH_SHORT).show();
+                monImage.setVisibility(View.INVISIBLE);
+                txtMonRes.setText("");
+            }else{
+                txtMonRes.setText(monControleur.getMaPersonne().getStrMessage());
+                monImage.setVisibility(View.VISIBLE);
+                monImage.setImageResource(monControleur.getMaPersonne().getI_image());
+            }
     }
 
-    public void click_ok(View v){
-        String leNom = txtNom.getText().toString();
-        int lage = Integer.parseInt(monAge.getText().toString());
-        int sexe = 0;
-        if (rdMonSexe.isChecked()) {
-            sexe = 1;
+    public void click_ok(View v) {
+        recupereValeurs();
+        this.monControleur.creerPersonne(i_Sexe, str_Nom, i_Age);
+        if(!this.monControleur.getErreurMessage().equals("")){
+            Toast.makeText(getBaseContext(),monControleur.getErreurMessage(),Toast.LENGTH_SHORT).show();
+        }else{
+            Intent intent2 = new Intent(this, page3.class);
+            startActivity(intent2);
         }
-        this.monControleur.creerPersonne(sexe, leNom, lage);
+    }
 
-        Intent intent2= new Intent(this, page3.class);
-        startActivity(intent2);
+    private void recupereValeurs(){
+        this.monControleur.setErreurMessage("");
+        str_Nom = txtNom.getText().toString();
+        str_Age = monAge.getText().toString();
+        try {
+            i_Age = Integer.parseInt(str_Age);
+        } catch (Exception e) {
+                i_Age = 0;
+        }
+        i_Sexe = 0;
+        if (rdMonSexe.isChecked()) {
+            i_Sexe = 1;
+        }
     }
 }

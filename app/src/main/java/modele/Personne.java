@@ -67,10 +67,5 @@ public class Personne {
         return strMessage;
     }
 
-    public void setStrMessage(String strMessage) {
-        this.strMessage = strMessage;
-    }
-
-
 }
 
